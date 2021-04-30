@@ -24,13 +24,15 @@ def connect_gsheet():
     return(service)
 
 def export_gsheet(sheet_data, s_range, majorDimension='ROWS'):
-    import gsheets_config as conf
+    from config import GoogleConfig
+    config = GoogleConfig('config.ini')
+    spreadsheet_id = config.spreadsheet_id
     for i, row in enumerate(sheet_data):
         for j, item in enumerate(row):
             sheet_data[i][j] = str(sheet_data[i][j])
     service = connect_gsheet()
     body = {"majorDimension": majorDimension, 'values': sheet_data}
-    result = service.spreadsheets().values().update(spreadsheetId=conf.spreadsheet_id, range=s_range, valueInputOption='RAW', body=body).execute()
+    result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=s_range, valueInputOption='RAW', body=body).execute()
     print('{0} cells updated'.format(result.get('updatedCells')))
     return(result)
 

@@ -1,10 +1,8 @@
-import genshin_config as conf
-
-def get_new_gacha_data(user_id, token, lang='ru'):
+def get_new_gacha_data(account_id, token, uid, lang='ru'):
     import genshinstats as gs
     import json
 
-    gs.set_cookie(account_id=user_id,cookie_token=token)
+    gs.set_cookie(account_id=account_id,cookie_token=token)
 
     data_dict = {}
     for t in gs.get_gacha_types(lang=lang):
@@ -13,19 +11,19 @@ def get_new_gacha_data(user_id, token, lang='ru'):
             data_list.append(pull)
         data_list.reverse()
         data_dict[t['key']] = data_list
-    json.dump(data_dict, open('data\\[%s]new_data.json'%(conf.GENSHIN_UID), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
+    json.dump(data_dict, open('data\\[%s]new_data.json'%(uid), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
     return data_dict
 
 
-def get_old_gacha_data():
+def get_old_gacha_data(uid, lang='ru'):
     import os
     import json
     import genshinstats as gs
     data = {}
-    if os.path.exists('data\\[%s]last_data.json'%(conf.GENSHIN_UID)) and os.stat('data\\[%s]last_data.json'%(conf.GENSHIN_UID)).st_size > 0:
-        data = json.load(open('data\\[%s]last_data.json'%(conf.GENSHIN_UID), 'r', encoding='utf-8'))
+    if os.path.exists('data\\[%s]last_data.json'%(uid)) and os.stat('data\\[%s]last_data.json'%(uid)).st_size > 0:
+        data = json.load(open('data\\[%s]last_data.json'%(uid), 'r', encoding='utf-8'))
     else:
-        for t in gs.get_gacha_types(lang=conf.LANG):
+        for t in gs.get_gacha_types(lang=lang):
             data[t['key']] = []
     return data
 
@@ -72,12 +70,19 @@ def compare_gacha_data(old_data_dict, new_data_dict):
 
 
 def update_gacha_data():
+    from config import GenshinConfig
     import json
     import os
-    new_data = get_new_gacha_data(conf.GENSHIN_UID, conf.GENSHIN_COOKIE_TOKEN, lang=conf.LANG)
-    old_data = get_old_gacha_data()
+
+    config = GenshinConfig('config.ini')
+    account_id = config.account_id
+    cookie_token = config.cookie_token
+    user_id = config.user_id
+    lang = config.lang
+    new_data = get_new_gacha_data(account_id, cookie_token, user_id, lang)
+    old_data = get_old_gacha_data(user_id, lang)
     final_data = compare_gacha_data(old_data, new_data)
-    json.dump(final_data, open('data\\[%s]last_data.json'%(conf.GENSHIN_UID), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
+    json.dump(final_data, open('data\\[%s]last_data.json'%(user_id), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
     return final_data
 
 if __name__ == "__main__":
