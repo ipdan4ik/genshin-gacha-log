@@ -24,5 +24,6 @@ This program uses `genshinstats` [module](https://github.com/thesadru/genshinsta
 1. Install the Google client library
 `pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib`
 2. Create a blank google sheet and copy spreadsheet id to `config.ini` (it is the value after `https://docs.google.com/spreadsheets/d/`)
-3. Run `print_data_gsheet.py`. If it is your first time running the script, it opens a new window prompting you to authorize in google
-4. Well done, the program creates a `main` tab and inserts gacha log there. You may need to change columns width manually and add some style (it will not be changed after execution)
+3. Rename or create a new tab named `main` in your google sheet
+4. Run `print_data_gsheet.py`. If it is your first time running the script, it opens a new window prompting you to authorize in google
+5. Well done, the program inserts gacha log in `main` tab. You may need to change columns width manually and add some style (it will not be changed after execution)
