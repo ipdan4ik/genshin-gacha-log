@@ -2,7 +2,7 @@ def get_new_gacha_data(account_id, token, uid, lang='ru'):
     import genshinstats as gs
     import json
 
-    gs.set_cookie(account_id=account_id,cookie_token=token)
+    gs.set_cookie(ltoken=token, ltuid=account_id)
 
     data_dict = {}
     for t in gs.get_gacha_types(lang=lang):
