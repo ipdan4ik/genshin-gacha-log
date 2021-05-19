@@ -55,7 +55,56 @@ def print_full_log(data_dict):
         export_gsheet(gsheet_list, ranges[rid])
         rid+=1
 
+def print_stats(data_dict):
+    ranges = ['stats!A1', 'stats!G1']
+    keys = list(data_dict.keys())
+    keys.sort()
+    gsheet_list = [['Название молитвы', 'Кол-во роллов', 'Кол-во 4★', 'Кол-во 5★', 'Последний ролл']]
+    all_length = 0
+    all_four = 0
+    all_five = 0
+    all_four_list = []
+    all_five_list = []
+    for key in keys:
+        name = data_dict[key][0]['gacha_name']
+        length = len(data_dict[key])
+        four = 0
+        five = 0
+        last_4 = 1
+        last_5 = 1
+        four_list = []
+        five_list = []
+        for item in data_dict[key]:
+            if item['rarity'] in ['4', 4]:
+                four_list.append(last_4)
+                four += 1
+                last_4 = 0
+            elif item['rarity'] in ['5', 5]:
+                five_list.append(last_5)
+                five += 1
+                last_5 = 0
+            last_4 += 1
+            last_5 += 1
+        all_length += length
+        all_four += four
+        all_five += five
+        all_four_list.extend(four_list)
+        all_five_list.extend(five_list)
+        gsheet_list.append([name, length, four, five, last_5])
+    gsheet_list.append(['Все', all_length, all_four, all_five])
+    export_gsheet(gsheet_list, ranges[0])
+    gsheet_list = [['', '4★', '5★']]
+    gsheet_list.append(['Соотношение', all_four / all_length, all_five / all_length])
+    gsheet_list.append(['Среднее', all_length/all_four, all_length/all_five])
+    get_median = lambda x: (x[len(x) // 2] + x[~(len(x) // 2)]) / 2
+    all_four_list.sort()
+    all_five_list.sort()
+    gsheet_list.append(['Медиана', get_median(all_four_list), get_median(all_five_list)])
+    export_gsheet(gsheet_list, ranges[1])
+        
+
 if __name__ == "__main__":
     import update_data as up
     data_dict = up.update_gacha_data()
     print_full_log(data_dict)
+    print_stats(data_dict)
