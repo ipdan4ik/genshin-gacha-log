@@ -91,7 +91,7 @@ def update_gacha_data():
     new_data = get_new_gacha_data(account_id, cookie_token, user_id, lang)
     old_data = get_old_gacha_data(user_id, lang)
     final_data = compare_gacha_data(old_data, new_data)
-    date_now = datetime.datetime.strftime(datetime.datetime.now(), '%d.%m.%Y')
+    date_now = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
     json.dump(old_data, open('data\\[%s]last_data_backup[%s].json'%(user_id, date_now), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
     json.dump(final_data, open('data\\[%s]last_data.json'%(user_id), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
     return final_data
