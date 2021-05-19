@@ -4,19 +4,22 @@ def get_new_gacha_data(account_id, token, uid, lang='ru'):
     from collections import OrderedDict
 
     gs.set_cookie(ltoken=token, ltuid=account_id)
-
-    data_dict = OrderedDict()
-    types = gs.get_gacha_types(lang=lang)
-    keys = [item['key'] for item in types]
-    keys.sort()
-    for key in keys:
-        data_list = []
-        for pull in gs.get_gacha_log(key, lang='ru'):
-            data_list.append(pull)
-        data_list.reverse()
-        data_dict[key] = data_list
-    json.dump(data_dict, open('data\\[%s]new_data.json'%(uid), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
-    return data_dict
+    if gs.get_uid_from_authkey() == int(uid):
+        
+        data_dict = OrderedDict()
+        types = gs.get_gacha_types(lang=lang)
+        keys = [item['key'] for item in types]
+        keys.sort()
+        for key in keys:
+            data_list = []
+            for pull in gs.get_gacha_log(key, lang='ru'):
+                data_list.append(pull)
+            data_list.reverse()
+            data_dict[key] = data_list
+        json.dump(data_dict, open('data\\[%s]new_data.json'%(uid), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
+        return data_dict
+    else:
+        return False
 
 
 def get_old_gacha_data(uid, lang='ru'):
@@ -90,7 +93,11 @@ def update_gacha_data():
 
     new_data = get_new_gacha_data(account_id, cookie_token, user_id, lang)
     old_data = get_old_gacha_data(user_id, lang)
-    final_data = compare_gacha_data(old_data, new_data)
+    if new_data:
+        final_data = compare_gacha_data(old_data, new_data)
+    else:
+        print("[INFO] user id from gacha and your user id does not match. Using old data")
+        final_data = old_data
     date_now = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
     json.dump(old_data, open('data\\[%s]last_data_backup[%s].json'%(user_id, date_now), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
     json.dump(final_data, open('data\\[%s]last_data.json'%(user_id), 'w', encoding='utf-8'), ensure_ascii=False, indent='    ')
