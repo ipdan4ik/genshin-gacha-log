@@ -94,8 +94,8 @@ def print_stats(data_dict):
     gsheet_list.append(['Все', all_length, all_four, all_five])
     export_gsheet(gsheet_list, ranges[0])
     gsheet_list = [['', '4★', '5★']]
-    gsheet_list.append(['Соотношение', all_four / all_length, all_five / all_length])
-    gsheet_list.append(['Среднее', all_length/all_four, all_length/all_five])
+    gsheet_list.append(['Соотношение', str(all_four / all_length)[:8], str(all_five / all_length)[:8]])
+    gsheet_list.append(['Среднее', str(all_length/all_four)[:8], str(all_length/all_five)[:8]])
     get_median = lambda x: (x[len(x) // 2] + x[~(len(x) // 2)]) / 2
     all_four_list.sort()
     all_five_list.sort()
