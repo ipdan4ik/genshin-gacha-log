@@ -102,9 +102,27 @@ def print_stats(data_dict):
     gsheet_list.append(['Медиана', get_median(all_four_list), get_median(all_five_list)])
     export_gsheet(gsheet_list, ranges[1])
         
+def print_characters(cookie_token, account_id, user_id):
+    import genshinstats as gs
+    
+    ranges = ['chars!A1']
+    gsheet_list = [['Персонаж', 'Созвездие', 'Дружба', 'Уровень']]
+    gs.set_cookie(ltoken=cookie_token, ltuid=account_id)
+    characters = gs.get_all_characters(user_id)
+
+    for char in characters:
+        gsheet_list.append([char['name'], char['constellation'], char['friendship'], char['level']])
+    export_gsheet(gsheet_list, ranges[0])
 
 if __name__ == "__main__":
     import update_data as up
+    from config import GenshinConfig
+    config = GenshinConfig('config.ini')
+    account_id = config.account_id
+    cookie_token = config.cookie_token
+    user_id = config.user_id
     data_dict = up.update_gacha_data()
+    # data_dict = up.get_old_gacha_data(user_id)
     print_full_log(data_dict)
     print_stats(data_dict)
+    print_characters(cookie_token, account_id, user_id)
