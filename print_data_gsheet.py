@@ -106,12 +106,12 @@ def print_characters(cookie_token, account_id, user_id):
     import genshinstats as gs
     
     ranges = ['chars!A1']
-    gsheet_list = [['Персонаж', 'Созвездие', 'Дружба', 'Уровень']]
+    gsheet_list = [['Персонаж', 'Созвездие', 'Дружба', 'Уровень', 'Редкость']]
     gs.set_cookie(ltoken=cookie_token, ltuid=account_id)
     characters = gs.get_all_characters(user_id)
 
     for char in characters:
-        gsheet_list.append([char['name'], char['constellation'], char['friendship'], char['level']])
+        gsheet_list.append([char['name'], char['constellation'], char['friendship'], char['level'], char['rarity']])
     export_gsheet(gsheet_list, ranges[0])
 
 if __name__ == "__main__":
