@@ -11,14 +11,14 @@ This program uses `genshinstats` [module](https://github.com/thesadru/genshinsta
 ## Configuration
 1. Install `genshinstats` library
 ```pip install genshinstats"```
-2. Rename `config.example.ini` to `config.iin`
+2. Rename `config.example.ini` to `config.ini`
 3. Enter your user id (right bottom corner of the game screen) to `config.ini`
-4. Get your `cookie_token` and `account_id` from hoyolab.com:
-    1. Go to `hoyolab.com` and login
-    2. Press `F12`
-    3. Go to `Application`, `Cookies`, `https://www.hoyolab.com`
-    4. Copy `cookie_token` and `account_id` to file `config.ini` (never share your token, it resets after changing password)
-5. Enter language to `config.ini` (I tested program only for `ru`)
+4. Log in to hoyolab.com
+5. Enter language to `config.ini` (I tested my program only for `ru`)
+6. Get your authkey:
+    i. Open Paimon menu ingame
+    ii. Click Feedback
+    iii. Copy link from opened browser tab
 
 ## Using google sheets
 1. Install the Google client library
