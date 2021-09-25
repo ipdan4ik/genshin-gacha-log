@@ -44,7 +44,7 @@ def print_full_log(data_dict):
 
     for key in keys:
         gsheet_list = []
-        gsheet_list.append([data_dict[key][0]['gacha_name']])
+        gsheet_list.append([data_dict[key][0]['banner']])
         gsheet_list.append(['#', '5#', 'name', 'time', 'rarity'])
         j = 1
         for i, item in enumerate(data_dict[key]):
@@ -66,7 +66,7 @@ def print_stats(data_dict):
     all_four_list = []
     all_five_list = []
     for key in keys:
-        name = data_dict[key][0]['gacha_name']
+        name = data_dict[key][0]['banner']
         length = len(data_dict[key])
         four = 0
         five = 0
@@ -102,13 +102,13 @@ def print_stats(data_dict):
     gsheet_list.append(['Медиана', get_median(all_four_list), get_median(all_five_list)])
     export_gsheet(gsheet_list, ranges[1])
         
-def print_characters(cookie_token, account_id, user_id):
+def print_characters(user_id):
     import genshinstats as gs
     
     ranges = ['chars!A1']
     gsheet_list = [['Персонаж', 'Созвездие', 'Дружба', 'Уровень', 'Редкость']]
-    gs.set_cookie(ltoken=cookie_token, ltuid=account_id)
-    characters = gs.get_all_characters(user_id)
+    gs.set_cookie_auto()
+    characters = gs.get_characters(user_id)
 
     for char in characters:
         gsheet_list.append([char['name'], char['constellation'], char['friendship'], char['level'], char['rarity']])
@@ -118,11 +118,9 @@ if __name__ == "__main__":
     import update_data as up
     from config import GenshinConfig
     config = GenshinConfig('config.ini')
-    account_id = config.account_id
-    cookie_token = config.cookie_token
     user_id = config.user_id
     data_dict = up.update_gacha_data()
     # data_dict = up.get_old_gacha_data(user_id)
     print_full_log(data_dict)
     print_stats(data_dict)
-    print_characters(cookie_token, account_id, user_id)
+    print_characters(user_id)

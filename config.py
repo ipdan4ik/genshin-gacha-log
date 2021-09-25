@@ -8,8 +8,6 @@ class GenshinConfig:
         self.config_object.read(self.path)
         self._config = self.config_object[self.key]
 
-        self.account_id = self.get_property('account_id')
-        self.cookie_token = self.get_property('cookie_token')
         self.user_id = self.get_property('user_id')
         self.lang = self.get_property('lang')
 
